@@ -43,4 +43,20 @@ public class ProductDAO {
             return false;
         }
     }
+    public boolean updateProduct(Product product) {
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(
+                     "UPDATE products SET ProductName = ?, Price = ? WHERE ProductID = ?")) {
+            preparedStatement.setString(1, product.getName());
+            preparedStatement.setDouble(2, product.getPrice());
+            preparedStatement.setInt(3, product.getId()); // Chú ý rằng bạn cần cung cấp ID của sản phẩm
+
+            int rowsAffected = preparedStatement.executeUpdate();
+
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }
