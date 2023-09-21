@@ -13,6 +13,7 @@ public class ProductListFrame extends JFrame {
     private ProductTableModel productTableModel;
     private JButton addButton;
     private JButton editButton;
+    private JButton deleteButton;
 
 
     public ProductListFrame() {
@@ -69,10 +70,37 @@ public class ProductListFrame extends JFrame {
             }
         });
 
+        deleteButton = new JButton("Xóa");
+
+        // Thêm sự kiện xóa sản phẩm
+        deleteButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int selectedRow = productTable.getSelectedRow();
+                if (selectedRow >= 0) {
+                    // Lấy sản phẩm được chọn
+                    Product selectedProduct = products.get(selectedRow);
+
+                    // Xác nhận xóa sản phẩm
+                    int confirmResult = JOptionPane.showConfirmDialog(null,
+                            "Bạn có chắc muốn xóa sản phẩm này?", "Xác nhận xóa",
+                            JOptionPane.YES_NO_OPTION);
+                    if (confirmResult == JOptionPane.YES_OPTION) {
+                        // Xóa sản phẩm và cập nhật danh sách
+                        products.remove(selectedProduct);
+                        productTableModel.updateTable(products);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(null, "Vui lòng chọn sản phẩm cần xóa.");
+                }
+            }
+        });
+
         // Thêm nút "Thêm sản phẩm" vào giao diện
         JPanel buttonPanel = new JPanel();
         buttonPanel.add(addButton);
         buttonPanel.add(editButton);
+        buttonPanel.add(deleteButton);
         add(buttonPanel, BorderLayout.SOUTH);
 
         productTableModel = new ProductTableModel();
